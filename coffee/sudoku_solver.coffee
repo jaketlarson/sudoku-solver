@@ -51,10 +51,12 @@ class window.SudokuSolver
         sequence.push value
       else
         sequence.push 0
+
+    console.log sequence.length
     
     $.ajax(
       type: 'GET'
-      url: "#{@solver_path}?#{sequence.join(' ')}"
+      url: "#{@solver_path}?puzzle=#{sequence.join(' ')}"
       success: (data) =>
         console.log data
 

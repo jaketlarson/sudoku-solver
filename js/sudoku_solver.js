@@ -78,9 +78,10 @@
           return sequence.push(0);
         }
       });
+      console.log(sequence.length);
       return $.ajax({
         type: 'GET',
-        url: "" + this.solver_path + "?" + (sequence.join(' ')),
+        url: "" + this.solver_path + "?puzzle=" + (sequence.join(' ')),
         success: function(data) {
           return console.log(data);
         },
