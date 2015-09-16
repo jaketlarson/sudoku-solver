@@ -1,0 +1,31 @@
+#puzzle-interface .puzzle-row {
+  overflow: hidden;
+}
+#puzzle-interface .puzzle-row input {
+  width: calc(1/9.1 * 100%);
+  max-width: 4rem;
+  height: 40px;
+  float: left;
+  font-size: 2rem;
+  text-align: center;
+  border-top: 0;
+  border-right: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
+  border-left: 0;
+}
+#puzzle-interface .puzzle-row input:first-child {
+  border-left: 1px solid #444444;
+}
+#puzzle-interface .puzzle-row input:nth-child(3n+3) {
+  border-right: 1px solid #444444;
+}
+#puzzle-interface .puzzle-row:first-child input {
+  border-top: 1px solid #444444;
+}
+#puzzle-interface .puzzle-row:nth-child(3n+3) input {
+  border-bottom: 1px solid #444444;
+}
+
+#puzzle-solve-button-wrap {
+  margin-top: 1rem;
+}

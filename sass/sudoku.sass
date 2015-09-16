@@ -1,0 +1,39 @@
+$puzzle-border-color: #ccc
+$puzzle-section-border-color: #444
+
+#puzzle-interface
+
+  .puzzle-row
+    overflow: hidden
+
+    input
+      width: calc(1/9.1 * 100%)
+      max-width: 4rem
+      height: 40px
+      float: left
+      font-size: 2rem
+      text-align: center
+      border-top: 0
+      border-right: 1px solid $puzzle-border-color
+      border-bottom: 1px solid $puzzle-border-color
+      border-left: 0
+
+      &:first-child
+        border-left: 1px solid $puzzle-section-border-color
+
+      // use distinct section borders to separate block sets of three
+      &:nth-child(3n+3)
+        border-right: 1px solid $puzzle-section-border-color
+
+    &:first-child
+      input
+        border-top: 1px solid $puzzle-section-border-color
+
+
+    // use distinct section borders to separate block sets of three
+    &:nth-child(3n+3)
+      input
+        border-bottom: 1px solid $puzzle-section-border-color
+
+#puzzle-solve-button-wrap
+  margin-top: 1rem
