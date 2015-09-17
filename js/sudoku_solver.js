@@ -3,6 +3,8 @@
 
   window.SudokuSolver = (function() {
     function SudokuSolver() {
+      this.handleSuccess = __bind(this.handleSuccess, this);
+      this.handleInvalid = __bind(this.handleInvalid, this);
       this.submitPuzzle = __bind(this.submitPuzzle, this);
       this.updateSize = __bind(this.updateSize, this);
       this.initListeners = __bind(this.initListeners, this);
@@ -83,11 +85,28 @@
         type: 'GET',
         url: "" + this.solver_path + "?puzzle=" + (sequence.join(' ')),
         success: function(data) {
-          return console.log(data);
+          if (data === "invalid") {
+            return _this.handleInvalid();
+          } else {
+            return _this.handleSuccess(data);
+          }
         },
         error: function() {
           return console.log('darn');
         }
+      });
+    };
+
+    SudokuSolver.prototype.handleInvalid = function() {
+      return console.log('invalid');
+    };
+
+    SudokuSolver.prototype.handleSuccess = function(data) {
+      var entries,
+        _this = this;
+      entries = data.split(' ');
+      return $.each(entries, function(index, entry) {
+        return _this.$puzzle_interface.find('input')[index].val(entry);
       });
     };
 

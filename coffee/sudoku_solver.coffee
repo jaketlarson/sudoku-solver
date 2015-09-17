@@ -58,11 +58,22 @@ class window.SudokuSolver
       type: 'GET'
       url: "#{@solver_path}?puzzle=#{sequence.join(' ')}"
       success: (data) =>
-        console.log data
+        if data == "invalid"
+          @handleInvalid()
+        else
+          @handleSuccess data
 
       error: =>
         console.log 'darn'
     )
+
+  handleInvalid: =>
+    console.log 'invalid'
+
+  handleSuccess: (data) =>
+    entries = data.split(' ')
+    $.each entries, (index, entry) =>
+      @$puzzle_interface.find('input')[index].val entry
 
 
 $ ->
