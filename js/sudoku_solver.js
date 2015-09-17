@@ -65,8 +65,7 @@
     SudokuSolver.prototype.updateSize = function() {
       var width;
       width = this.$puzzle_interface.find('input').width();
-      this.$puzzle_interface.find('input').height(width);
-      return console.log(width);
+      return this.$puzzle_interface.find('input').height(width);
     };
 
     SudokuSolver.prototype.submitPuzzle = function() {

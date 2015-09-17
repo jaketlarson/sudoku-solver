@@ -39,7 +39,6 @@ class window.SudokuSolver
   updateSize: =>
     width = @$puzzle_interface.find('input').width()
     @$puzzle_interface.find('input').height(width)
-    console.log width
 
   submitPuzzle: =>
     if @xhr_waiting
