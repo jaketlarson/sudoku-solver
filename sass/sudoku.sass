@@ -1,5 +1,7 @@
 $puzzle-border-color: #ccc
 $puzzle-section-border-color: #444
+$success_flash_color: #2ecc71
+$error_flash_color: #e74c3c
 
 #puzzle-interface
 
@@ -18,6 +20,9 @@ $puzzle-section-border-color: #444
       border-bottom: 1px solid $puzzle-border-color
       border-left: 0
 
+      &:disabled
+        background-color: #eee
+
       &:first-child
         border-left: 1px solid $puzzle-section-border-color
 
@@ -35,5 +40,42 @@ $puzzle-section-border-color: #444
       input
         border-bottom: 1px solid $puzzle-section-border-color
 
+
 #puzzle-solve-button-wrap
   margin-top: 1rem
+
+.success-flash
+  animation-name: success-flash
+  animation-duration: 0.5s
+  -webkit-animation-name: success-flash
+  -webkit-animation-duration: 0.5s
+
+@keyframes success-flash
+  from
+    background-color: $success_flash_color
+  to
+    background-color: white
+
+@-webkit-keyframes success-flash
+  from
+    background-color: $success_flash_color
+  to
+    background-color: white
+
+.error-flash
+  animation-name: error-flash
+  animation-duration: 0.5s
+  -webkit-animation-name: error-flash
+  -webkit-animation-duration: 0.5s
+
+@keyframes error-flash
+  from
+    background-color: $error_flash_color
+  to
+    background-color: white
+
+@-webkit-keyframes error-flash
+  from
+    background-color: $error_flash_color
+  to
+    background-color: white

@@ -9,6 +9,8 @@ class window.SudokuSolver
     @solver_path = "http://sudoku-solver-mdl.herokuapp.com/solver/call_solver.php"
     @$puzzle_interface = $('#puzzle-interface')
     @$sudoku_submit_form = $('form#sudoku-submit')
+    @$error_connection = $('#error-connection')
+    @$error_invalid = $('#error-invalid')
     @rows = 9
     @cols = 9
 
@@ -44,6 +46,9 @@ class window.SudokuSolver
     console.log width
 
   submitPuzzle: =>
+    @hideErrors()
+    @disablePuzzle()
+
     sequence = []
     $.each @$puzzle_interface.find('input'), (index, elem) =>
       value = parseInt($(elem).val())
@@ -58,22 +63,47 @@ class window.SudokuSolver
       type: 'GET'
       url: "#{@solver_path}?puzzle=#{sequence.join(' ')}"
       success: (data) =>
+        @enablePuzzle()
+
         if data == "invalid"
           @handleInvalid()
         else
           @handleSuccess data
 
       error: =>
-        console.log 'darn'
+        @enablePuzzle()
+        @handleConnectionError()
     )
 
+  hideErrors: =>
+    @$error_invalid.hide()
+    @$error_connection.hide()
+
   handleInvalid: =>
-    console.log 'invalid'
+    @$error_invalid.show()
+    @$puzzle_interface.find('input').addClass('error-flash')
+    @resetInputAfterFlash()
+
+  handleConnectionError: =>
+    @$error_connection.show()
 
   handleSuccess: (data) =>
     entries = data.split(' ')
     $.each entries, (index, entry) =>
-      $(@$puzzle_interface.find('input')[index]).val entry
+      $(@$puzzle_interface.find('input')[index]).val(entry).addClass('success-flash')
+
+    @resetInputAfterFlash()
+
+  resetInputAfterFlash: =>
+    setTimeout(() =>
+      @$puzzle_interface.find('input').removeClass('success-flash').removeClass('error-flash')
+    , 500)
+
+  disablePuzzle: =>
+    @$puzzle_interface.find('input').prop 'disabled', true
+
+  enablePuzzle: =>
+    @$puzzle_interface.find('input').prop 'disabled', false
 
 
 $ ->

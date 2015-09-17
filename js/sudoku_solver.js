@@ -3,8 +3,13 @@
 
   window.SudokuSolver = (function() {
     function SudokuSolver() {
+      this.enablePuzzle = __bind(this.enablePuzzle, this);
+      this.disablePuzzle = __bind(this.disablePuzzle, this);
+      this.resetInputAfterFlash = __bind(this.resetInputAfterFlash, this);
       this.handleSuccess = __bind(this.handleSuccess, this);
+      this.handleConnectionError = __bind(this.handleConnectionError, this);
       this.handleInvalid = __bind(this.handleInvalid, this);
+      this.hideErrors = __bind(this.hideErrors, this);
       this.submitPuzzle = __bind(this.submitPuzzle, this);
       this.updateSize = __bind(this.updateSize, this);
       this.initListeners = __bind(this.initListeners, this);
@@ -20,6 +25,8 @@
       this.solver_path = "http://sudoku-solver-mdl.herokuapp.com/solver/call_solver.php";
       this.$puzzle_interface = $('#puzzle-interface');
       this.$sudoku_submit_form = $('form#sudoku-submit');
+      this.$error_connection = $('#error-connection');
+      this.$error_invalid = $('#error-invalid');
       this.rows = 9;
       return this.cols = 9;
     };
@@ -70,6 +77,8 @@
     SudokuSolver.prototype.submitPuzzle = function() {
       var sequence,
         _this = this;
+      this.hideErrors();
+      this.disablePuzzle();
       sequence = [];
       $.each(this.$puzzle_interface.find('input'), function(index, elem) {
         var value;
@@ -85,6 +94,7 @@
         type: 'GET',
         url: "" + this.solver_path + "?puzzle=" + (sequence.join(' ')),
         success: function(data) {
+          _this.enablePuzzle();
           if (data === "invalid") {
             return _this.handleInvalid();
           } else {
@@ -92,22 +102,50 @@
           }
         },
         error: function() {
-          return console.log('darn');
+          _this.enablePuzzle();
+          return _this.handleConnectionError();
         }
       });
     };
 
+    SudokuSolver.prototype.hideErrors = function() {
+      this.$error_invalid.hide();
+      return this.$error_connection.hide();
+    };
+
     SudokuSolver.prototype.handleInvalid = function() {
-      return console.log('invalid');
+      this.$error_invalid.show();
+      this.$puzzle_interface.find('input').addClass('error-flash');
+      return this.resetInputAfterFlash();
+    };
+
+    SudokuSolver.prototype.handleConnectionError = function() {
+      return this.$error_connection.show();
     };
 
     SudokuSolver.prototype.handleSuccess = function(data) {
       var entries,
         _this = this;
       entries = data.split(' ');
-      return $.each(entries, function(index, entry) {
-        return $(_this.$puzzle_interface.find('input')[index]).val(entry);
+      $.each(entries, function(index, entry) {
+        return $(_this.$puzzle_interface.find('input')[index]).val(entry).addClass('success-flash');
       });
+      return this.resetInputAfterFlash();
+    };
+
+    SudokuSolver.prototype.resetInputAfterFlash = function() {
+      var _this = this;
+      return setTimeout(function() {
+        return _this.$puzzle_interface.find('input').removeClass('success-flash').removeClass('error-flash');
+      }, 500);
+    };
+
+    SudokuSolver.prototype.disablePuzzle = function() {
+      return this.$puzzle_interface.find('input').prop('disabled', true);
+    };
+
+    SudokuSolver.prototype.enablePuzzle = function() {
+      return this.$puzzle_interface.find('input').prop('disabled', false);
     };
 
     return SudokuSolver;

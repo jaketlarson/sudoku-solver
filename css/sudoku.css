@@ -13,6 +13,9 @@
   border-bottom: 1px solid #cccccc;
   border-left: 0;
 }
+#puzzle-interface .puzzle-row input:disabled {
+  background-color: #eeeeee;
+}
 #puzzle-interface .puzzle-row input:first-child {
   border-left: 1px solid #444444;
 }
@@ -28,4 +31,58 @@
 
 #puzzle-solve-button-wrap {
   margin-top: 1rem;
+}
+
+.success-flash {
+  animation-name: success-flash;
+  animation-duration: 0.5s;
+  -webkit-animation-name: success-flash;
+  -webkit-animation-duration: 0.5s;
+}
+
+@keyframes success-flash {
+  from {
+    background-color: #2ecc71;
+  }
+
+  to {
+    background-color: white;
+  }
+}
+
+@-webkit-keyframes success-flash {
+  from {
+    background-color: #2ecc71;
+  }
+
+  to {
+    background-color: white;
+  }
+}
+
+.error-flash {
+  animation-name: error-flash;
+  animation-duration: 0.5s;
+  -webkit-animation-name: error-flash;
+  -webkit-animation-duration: 0.5s;
+}
+
+@keyframes error-flash {
+  from {
+    background-color: #e74c3c;
+  }
+
+  to {
+    background-color: white;
+  }
+}
+
+@-webkit-keyframes error-flash {
+  from {
+    background-color: #e74c3c;
+  }
+
+  to {
+    background-color: white;
+  }
 }
