@@ -73,7 +73,7 @@ class window.SudokuSolver
   handleSuccess: (data) =>
     entries = data.split(' ')
     $.each entries, (index, entry) =>
-      @$puzzle_interface.find('input')[index].val entry
+      $(@$puzzle_interface.find('input')[index]).val entry
 
 
 $ ->

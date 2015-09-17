@@ -106,7 +106,7 @@
         _this = this;
       entries = data.split(' ');
       return $.each(entries, function(index, entry) {
-        return _this.$puzzle_interface.find('input')[index].val(entry);
+        return $(_this.$puzzle_interface.find('input')[index]).val(entry);
       });
     };
 
