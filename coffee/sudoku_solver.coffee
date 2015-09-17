@@ -9,10 +9,12 @@ class window.SudokuSolver
     @solver_path = "http://sudoku-solver-mdl.herokuapp.com/solver/call_solver.php"
     @$puzzle_interface = $('#puzzle-interface')
     @$sudoku_submit_form = $('form#sudoku-submit')
+    @$sudoku_reset_button = $('a#puzzle-reset')
     @$error_connection = $('#error-connection')
     @$error_invalid = $('#error-invalid')
     @rows = 9
     @cols = 9
+    @xhr_waiting = false
 
   buildPuzzleInterface: =>
     for i in [1..@rows]
@@ -24,15 +26,6 @@ class window.SudokuSolver
       @$puzzle_interface.append $row
 
   initListeners: =>
-    @$puzzle_interface.find('input').keyup (e) =>
-      $elem = $(e.currentTarget)
-      val = parseInt $elem.val()
-
-      if val >= 1 && val <= 9
-        index = @$puzzle_interface.find('input').index $elem
-        if index != @$puzzle_interface.find('input').length - 1
-          @$puzzle_interface.find('input')[index+1].focus()
-
     $(window).resize =>
       @updateSize()
 
@@ -40,14 +33,22 @@ class window.SudokuSolver
       e.preventDefault()
       @submitPuzzle()
 
+    @$sudoku_reset_button.click =>
+      @reset()
+
   updateSize: =>
     width = @$puzzle_interface.find('input').width()
     @$puzzle_interface.find('input').height(width)
     console.log width
 
   submitPuzzle: =>
+    if @xhr_waiting
+      return
+
+    console.log 'submitting'
+
     @hideErrors()
-    @disablePuzzle()
+    @disable()
 
     sequence = []
     $.each @$puzzle_interface.find('input'), (index, elem) =>
@@ -56,14 +57,14 @@ class window.SudokuSolver
         sequence.push value
       else
         sequence.push 0
-
-    console.log sequence.length
     
+    @xhr_waiting = true
     $.ajax(
       type: 'GET'
       url: "#{@solver_path}?puzzle=#{sequence.join(' ')}"
       success: (data) =>
-        @enablePuzzle()
+        @xhr_waiting = false
+        @enable()
 
         if data == "invalid"
           @handleInvalid()
@@ -71,7 +72,8 @@ class window.SudokuSolver
           @handleSuccess data
 
       error: =>
-        @enablePuzzle()
+        @xhr_waiting = false
+        @enable()
         @handleConnectionError()
     )
 
@@ -99,12 +101,19 @@ class window.SudokuSolver
       @$puzzle_interface.find('input').removeClass('success-flash').removeClass('error-flash')
     , 500)
 
-  disablePuzzle: =>
+  disable: =>
     @$puzzle_interface.find('input').prop 'disabled', true
+    @$sudoku_submit_form.find('button').prop 'disabled', true
+    @$sudoku_reset_button.addClass('mdl-button--disabled')
 
-  enablePuzzle: =>
+  enable: =>
     @$puzzle_interface.find('input').prop 'disabled', false
+    @$sudoku_submit_form.find('button').prop 'disabled', false
+    @$sudoku_reset_button.removeClass('mdl-button--disabled')
 
+  reset: =>
+    if !@xhr_waiting
+      @$puzzle_interface.find('input').val ''
 
 $ ->
   solver = new window.SudokuSolver

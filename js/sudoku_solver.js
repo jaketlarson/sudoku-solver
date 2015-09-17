@@ -3,8 +3,9 @@
 
   window.SudokuSolver = (function() {
     function SudokuSolver() {
-      this.enablePuzzle = __bind(this.enablePuzzle, this);
-      this.disablePuzzle = __bind(this.disablePuzzle, this);
+      this.reset = __bind(this.reset, this);
+      this.enable = __bind(this.enable, this);
+      this.disable = __bind(this.disable, this);
       this.resetInputAfterFlash = __bind(this.resetInputAfterFlash, this);
       this.handleSuccess = __bind(this.handleSuccess, this);
       this.handleConnectionError = __bind(this.handleConnectionError, this);
@@ -25,10 +26,12 @@
       this.solver_path = "http://sudoku-solver-mdl.herokuapp.com/solver/call_solver.php";
       this.$puzzle_interface = $('#puzzle-interface');
       this.$sudoku_submit_form = $('form#sudoku-submit');
+      this.$sudoku_reset_button = $('a#puzzle-reset');
       this.$error_connection = $('#error-connection');
       this.$error_invalid = $('#error-invalid');
       this.rows = 9;
-      return this.cols = 9;
+      this.cols = 9;
+      return this.xhr_waiting = false;
     };
 
     SudokuSolver.prototype.buildPuzzleInterface = function() {
@@ -47,23 +50,15 @@
 
     SudokuSolver.prototype.initListeners = function() {
       var _this = this;
-      this.$puzzle_interface.find('input').keyup(function(e) {
-        var $elem, index, val;
-        $elem = $(e.currentTarget);
-        val = parseInt($elem.val());
-        if (val >= 1 && val <= 9) {
-          index = _this.$puzzle_interface.find('input').index($elem);
-          if (index !== _this.$puzzle_interface.find('input').length - 1) {
-            return _this.$puzzle_interface.find('input')[index + 1].focus();
-          }
-        }
-      });
       $(window).resize(function() {
         return _this.updateSize();
       });
-      return this.$sudoku_submit_form.submit(function(e) {
+      this.$sudoku_submit_form.submit(function(e) {
         e.preventDefault();
         return _this.submitPuzzle();
+      });
+      return this.$sudoku_reset_button.click(function() {
+        return _this.reset();
       });
     };
 
@@ -77,8 +72,12 @@
     SudokuSolver.prototype.submitPuzzle = function() {
       var sequence,
         _this = this;
+      if (this.xhr_waiting) {
+        return;
+      }
+      console.log('submitting');
       this.hideErrors();
-      this.disablePuzzle();
+      this.disable();
       sequence = [];
       $.each(this.$puzzle_interface.find('input'), function(index, elem) {
         var value;
@@ -89,12 +88,13 @@
           return sequence.push(0);
         }
       });
-      console.log(sequence.length);
+      this.xhr_waiting = true;
       return $.ajax({
         type: 'GET',
         url: "" + this.solver_path + "?puzzle=" + (sequence.join(' ')),
         success: function(data) {
-          _this.enablePuzzle();
+          _this.xhr_waiting = false;
+          _this.enable();
           if (data === "invalid") {
             return _this.handleInvalid();
           } else {
@@ -102,7 +102,8 @@
           }
         },
         error: function() {
-          _this.enablePuzzle();
+          _this.xhr_waiting = false;
+          _this.enable();
           return _this.handleConnectionError();
         }
       });
@@ -140,12 +141,22 @@
       }, 500);
     };
 
-    SudokuSolver.prototype.disablePuzzle = function() {
-      return this.$puzzle_interface.find('input').prop('disabled', true);
+    SudokuSolver.prototype.disable = function() {
+      this.$puzzle_interface.find('input').prop('disabled', true);
+      this.$sudoku_submit_form.find('button').prop('disabled', true);
+      return this.$sudoku_reset_button.addClass('mdl-button--disabled');
     };
 
-    SudokuSolver.prototype.enablePuzzle = function() {
-      return this.$puzzle_interface.find('input').prop('disabled', false);
+    SudokuSolver.prototype.enable = function() {
+      this.$puzzle_interface.find('input').prop('disabled', false);
+      this.$sudoku_submit_form.find('button').prop('disabled', false);
+      return this.$sudoku_reset_button.removeClass('mdl-button--disabled');
+    };
+
+    SudokuSolver.prototype.reset = function() {
+      if (!this.xhr_waiting) {
+        return this.$puzzle_interface.find('input').val('');
+      }
     };
 
     return SudokuSolver;

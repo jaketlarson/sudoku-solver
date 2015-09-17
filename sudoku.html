@@ -48,6 +48,7 @@
         <div class="mdl-layout__header-row">
           <span class="mdl-layout-title">Sudoku Puzzle Solver</span>
           <div class="mdl-layout-spacer"></div>
+          <span><a href="https://github.com/jaketlarson/sudoku-solver">GitHub Repository</a> | <a href="http://www.codereloadrepeat.com">More by Jake Larson</a></span>
         </div>
       </header>
       <div class="demo-ribbon"></div>
@@ -60,12 +61,13 @@
             </div> -->
             <h3>Enter sudoku puzzle below</h3>
 
-            <div id='puzzle-interface'></div>
-            <div id='puzzle-solve-button-wrap'>
-              <form id='sudoku-submit'>
+            <form id='sudoku-submit'>
+              <div id='puzzle-interface'></div>
+              <div id='puzzle-solve-button-wrap'>
+                <a id='puzzle-reset' class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Reset</a>
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Solve</button>
-              </form>
-            </div>
+              </div>
+            </form>
             <div id='error-connection' class='error'>Could not connect to server. Please contact <a href='mailto:codereloadrepeat@gmail.com'>codereloadrepeat@gmail.com</a> for assistance.</div>
             <div id='error-invalid' class='error'>We couldn't solve your puzzle, it seems to be invalid. Please try again.</div>
 

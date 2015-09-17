@@ -2,7 +2,7 @@
   overflow: hidden;
 }
 #puzzle-interface .puzzle-row input {
-  width: calc(1/9.1 * 100%);
+  width: calc(1/10 * 100%);
   max-width: 4rem;
   height: 40px;
   float: left;
