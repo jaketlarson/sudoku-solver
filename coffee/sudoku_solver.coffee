@@ -115,6 +115,7 @@ class window.SudokuSolver
   reset: =>
     if !@xhr_waiting
       @$puzzle_interface.find('input').val ''
+      @hideErrors()
 
 $ ->
   solver = new window.SudokuSolver

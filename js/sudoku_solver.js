@@ -155,7 +155,8 @@
 
     SudokuSolver.prototype.reset = function() {
       if (!this.xhr_waiting) {
-        return this.$puzzle_interface.find('input').val('');
+        this.$puzzle_interface.find('input').val('');
+        return this.hideErrors();
       }
     };
 
