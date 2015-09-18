@@ -56,6 +56,8 @@ class window.SudokuSolver
         sequence.push value
       else
         sequence.push 0
+
+    console.log sequence.join(' ')
     
     @xhr_waiting = true
     $.ajax(

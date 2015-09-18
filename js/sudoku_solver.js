@@ -87,6 +87,7 @@
           return sequence.push(0);
         }
       });
+      console.log(sequence.join(' '));
       this.xhr_waiting = true;
       return $.ajax({
         type: 'GET',
