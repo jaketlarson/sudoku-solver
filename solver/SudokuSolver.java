@@ -148,21 +148,25 @@ public class SudokuSolver {
 		
 		// Check 3x3 squares now, per possible move
 		for(int move = 1; move <= puzzle.length; move++) {
-			int move_count = 0;
-
-			// Move through 3x3 squares horizontally
+			// Move through 3x3 squares vertically
 			for(int i = 0; i < puzzle.length / 3; i++) {
 				
-				// Move through 3x3 squares vertically
+				// Move through 3x3 squares horizontally
 				for(int j = 0; j < puzzle.length / 3; j++) {
-					// Check if lines 
-					if(puzzle[i*3 + 0][j] == move || puzzle[i*3 +1][j] == move || puzzle[i*3+2][j] == move) {
-						if(move_count == 0) {
-							move_count++;
-						} else {
-							return false;
+					// Check if horizontal lines in this row of this 3x3 square == this move
+
+					// move_count tracks number of occurrences of this move in this 3x3 square
+					int move_count = 0;
+					for(int k = j*3; k < j*3+3; k++) {
+						if(puzzle[i*3+0][k] == move || puzzle[i*3+1][k] == move || puzzle[i*3+2][k] == move) {
+							if(move_count == 0) {
+								move_count++;
+//debug:								System.out.println(move +" set near ["+i*3+"]["+k+"] or ["+i*3+1+"]["+k+"] or ["+i*3+2+"]["+k+"]");
+							} else {
+//debug:								System.out.println(move +" invalid near ["+i*3+"]["+k+"]");
+								return false;
+							}
 						}
-						
 					}
 				}
 			}
@@ -237,12 +241,15 @@ public class SudokuSolver {
 			System.out.println("Your puzzle input:");
 			solver.showCurrentPuzzle();
 
-			if(solver.solve()) {
-				System.out.println("\nYour puzzle has been solved! Here it is:");
-				solver.showCurrentPuzzle();
-				System.out.println(solver.toString());
+			if(solver.isLegal()) {
+				if(solver.solve()) {
+					System.out.println("\nYour puzzle has been solved! Here it is:");
+					solver.showCurrentPuzzle();
+				} else {
+					System.out.println("\nInvalid puzzle, could not solve.");
+				}
 			} else {
-				System.out.println("\nInvalid puzzle, could not solve.");
+				System.out.println("\nYour puzzle is illegal.");
 			}
 
 			long time = System.currentTimeMillis() - start;
