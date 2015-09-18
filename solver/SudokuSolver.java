@@ -118,34 +118,34 @@ public class SudokuSolver {
 		// The run time will be longer, but invalid inputs will cause a never-ending loop.
 		// It would be cool to find a way to minimize the work done here.
 
-		// Check rows
+		// Check horizontally
 		for(int i = 0; i < puzzle.length; i++) {
-			int[] row_digits = new int[puzzle.length];
+			int[] h_digits = new int[puzzle.length]; // digits on the horizontal (this row)
 			for(int j = 0; j < puzzle[i].length; j++) {
 				if(puzzle[i][j] > 0) {
-					if(row_digits[puzzle[i][j]-1] > 0) {
+					if(h_digits[puzzle[i][j]-1] > 0) {
 						return false;
 					} else {
-						row_digits[puzzle[i][j]-1] = j+1;
+						h_digits[puzzle[i][j]-1] = puzzle[i][j];
 					}
 				}
 			}
 		}
 		
-		// Check rows
-		for(int j = 0; j < puzzle.length; j++) {
-			int[] col_digits = new int[puzzle.length];
-			for(int i = 0; i < puzzle[j].length; i++) {
-				if(puzzle[i][j] > 0) {
-					if(col_digits[puzzle[i][j]-1] > 0) {
+		// Check vertically
+		for(int i = 0; i < puzzle.length; i++) {
+			int[] v_digits = new int[puzzle.length]; // digits on the vertical (this column)
+			for(int j = 0; j < puzzle.length; j++) {
+				if(puzzle[j][i] > 0) {
+					if(v_digits[puzzle[j][i]-1] > 0) {
 						return false;
 					} else {
-						col_digits[puzzle[i][j]-1] = j;
+						v_digits[puzzle[j][i]-1] = puzzle[j][i];
 					}
 				}
 			}
 		}
-		
+
 		// Check 3x3 squares now, per possible move
 		for(int move = 1; move <= puzzle.length; move++) {
 			// Move through 3x3 squares vertically
