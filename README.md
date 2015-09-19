@@ -8,9 +8,9 @@ When the user requests a puzzle to be solved, the JavaScript calls the a PHP fil
 
 ## Site Development Environment
 The site developments process utilizes template languages:
-* Slim: compiles into HTML
-* CoffeeScript: compiles into JavaScript
-* SASS: compiles into CSS
+* <a href="http://slim-lang.com/">Slim</a>: compiles into HTML
+* <a href="http://coffeescript.org/">CoffeeScript</a>: compiles into JavaScript
+* <a href="http://sass-lang.com/">SASS</a>: compiles into CSS
 
 ## Credits
 Built by <a href="http://www.codereloadrepeat.com">Jake Larson</a>. Feel free to take a peek at my other projects, <a href="http://www.codereloadrepeat.com/portfolio">here</a>.
