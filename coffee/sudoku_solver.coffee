@@ -18,7 +18,6 @@ class window.SudokuSolver
 
   buildPuzzleInterface: =>
     for i in [1..@rows]
-      console.log i
       $row = $('<div />').attr('class', 'puzzle-row')
       for i in [1..@cols]
         $row.append "<input type='text' maxlength='1'>"
@@ -44,8 +43,6 @@ class window.SudokuSolver
     if @xhr_waiting
       return
 
-    console.log 'submitting'
-
     @hideErrors()
     @disable()
 
@@ -56,8 +53,6 @@ class window.SudokuSolver
         sequence.push value
       else
         sequence.push 0
-
-    console.log sequence.join(' ')
     
     @xhr_waiting = true
     $.ajax(
